@@ -5,7 +5,21 @@ const Post = () => {
   const [posts, setPostes] = useState({});
   const HandalPostFrom = (e) => {
     e.preventDefault();
-    console.log(posts);
+    fetch("http://localhost:5000/allpost", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(posts),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          alert("post success");
+          e.target.reset();
+        }
+      });
   };
   const handalInputBlur = (e) => {
     const inputName = e.target.name;
@@ -42,6 +56,14 @@ const Post = () => {
         />
         <br />
         <input
+          type="photoUrl"
+          onBlur={handalInputBlur}
+          name="img"
+          id=""
+          placeholder="photo url"
+        />
+        <br />
+        <input
           type="text"
           onBlur={handalInputBlur}
           name="body"
@@ -50,8 +72,6 @@ const Post = () => {
         />
         <br />
         <button type="submit">Post Now</button>
-        <button type="submit">Edit </button>
-        <button type="submit">Delit</button>
       </form>
     </div>
   );
