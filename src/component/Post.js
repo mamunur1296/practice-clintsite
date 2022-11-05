@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Post.css";
 
 const Post = () => {
   const [posts, setPostes] = useState({});
+  const navigate = useNavigate();
   const HandalPostFrom = (e) => {
     e.preventDefault();
     fetch("http://localhost:5000/allpost", {
@@ -18,6 +20,7 @@ const Post = () => {
         if (data.acknowledged) {
           alert("post success");
           e.target.reset();
+          navigate("/display");
         }
       });
   };

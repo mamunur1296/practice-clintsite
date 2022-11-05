@@ -60,6 +60,11 @@ const DisplayPost = ({ post, setRefresh, refresh }) => {
       >
         Delite
       </button>
+      <Link to={`/checkout/${_id}`}>
+        <button className="btn bg-gray-200 w-full py-2 mt-10 text-black">
+          Check Out
+        </button>
+      </Link>
     </div>
   );
 };
