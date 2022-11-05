@@ -29,6 +29,23 @@ const Orders = () => {
         });
     }
   };
+  const handalStatus = (id) => {
+    console.log(id);
+    fetch(`http://localhost:5000/updateStatus/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ status: "Approve" }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          alert("success fully update");
+          seuRefresh(!refresh);
+        }
+      });
+  };
   return (
     <div>
       <h1>this is orders page {orders.length} </h1>
@@ -41,6 +58,7 @@ const Orders = () => {
             <OrdersCard
               key={order._id}
               handalCartDelete={handalCartDelete}
+              handalStatus={handalStatus}
               order={order}
             ></OrdersCard>
           ))}
