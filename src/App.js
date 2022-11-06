@@ -52,7 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/orders",
-        element: <Orders></Orders>,
+        element: (
+          <Protectedroute>
+            <Orders></Orders>
+          </Protectedroute>
+        ),
       },
     ],
   },

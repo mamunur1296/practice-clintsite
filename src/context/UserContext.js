@@ -12,7 +12,7 @@ export const AuthContext = createContext();
 const auth = getAuth(app);
 
 const UserContext = ({ children }) => {
-  const [user, setUser] = useState({ name: "mamun" });
+  const [user, setUser] = useState(null);
   const [loder, setLoder] = useState(true);
 
   const regester = (email, password) => {
@@ -24,14 +24,14 @@ const UserContext = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
   const logout = () => {
-    setLoder(true);
+    localStorage.removeItem("token");
     return signOut(auth);
   };
 
   useEffect(() => {
     const unsuscriber = onAuthStateChanged(auth, (newUser) => {
-      setUser(newUser);
       setLoder(false);
+      setUser(newUser);
     });
     return () => unsuscriber();
   }, []);

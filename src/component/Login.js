@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/UserContext";
 
 const Login = () => {
-  const { user, login } = useContext(AuthContext);
+  const { user, login, logout } = useContext(AuthContext);
   const location = useLocation();
   const navigation = useNavigate();
   const from = location?.state?.from?.pathname || "/";
@@ -15,8 +15,25 @@ const Login = () => {
     login(email, password)
       .then((res) => {
         const user = res.user;
+
+        const currentUser = {
+          email: user.email,
+        };
+        fetch("http://localhost:5000/jwt", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(currentUser),
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            localStorage.setItem("token", data.token);
+          });
+
         navigation(from, { replace: true });
-        console.log(user);
       })
       .catch((error) => console.log(error));
   };

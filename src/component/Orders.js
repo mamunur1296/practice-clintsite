@@ -1,19 +1,41 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/UserContext";
 import OrdersCard from "./OrdersCard";
 
 const Orders = () => {
-  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { user, logout, setLoder } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
   const [refresh, seuRefresh] = useState(fetch);
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user?.email}`)
-      .then((res) => res.json())
+    fetch(`http://localhost:5000/orders?email=${user?.email}`, {
+      //jwt issu
+      headers: {
+        authorijation: `Bearrr ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          return res.json();
+        }
+        logout();
+        navigate("/login");
+      })
       .then((data) => {
         setOrders(data);
       })
       .catch((error) => console.log(error));
-  }, [user?.email, refresh]);
+  }, [user?.email, refresh, logout]);
+  // useEffect(() => {
+  //   fetch(`http://localhost:5000/orders?email=${user?.email}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setOrders(data);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, [user?.email, refresh]);
   const handalCartDelete = (id) => {
     const proceed = window.confirm("are you sure");
     if (proceed) {
